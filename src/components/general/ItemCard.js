@@ -8,7 +8,9 @@ import IconButton from '@material-ui/core/IconButton';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import {makeStyles} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-
+import {connect} from 'react-redux';
+import {updateCartAction} from '../../actions/UpdateCartAction';
+import CartUtils from '../../utils/CartUtils';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,9 +31,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+const mapStateToProps = (state) => ({
+    items: state.items,
+})
+
 function ItemCard(props) {
     const classes = useStyles();
     const {id, title, image_url, description, price} = props.item;
+
+    const addToItems = () => {
+        props.dispatch(updateCartAction(CartUtils.add(props.item, props.items)));
+    }
+
     return (
         <Grid
             container item xs={6} md={4} spacing={2}
@@ -56,14 +67,13 @@ function ItemCard(props) {
                 </CardContent>
                 <CardActions className={classes.actions}>
                     <span>$ {price}</span>
-                    <IconButton>
+                    <IconButton onClick={addToItems}>
                         <AddShoppingCartIcon/>
                     </IconButton>
                 </CardActions>
-
             </Card>
         </Grid>
     )
 }
 
-export default ItemCard
+export default connect(mapStateToProps)(ItemCard);

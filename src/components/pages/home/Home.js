@@ -3,8 +3,8 @@ import Menu from '../../general/Menu';
 import Grid from '@material-ui/core/Grid';
 import ItemCard from '../../general/ItemCard';
 import Api from "../../../api/Api";
-import {MenuItem} from "@material-ui/core";
-
+import Cart from "../../general/Cart";
+import ListItem from "@material-ui/core/ListItem";
 
 export default class Home extends Component {
 
@@ -15,7 +15,6 @@ export default class Home extends Component {
 
     componentDidMount() {
         Api.getMenu().then((res) => {
-            console.log(res)
             this.setState({menuItems: res})
         })
     }
@@ -42,16 +41,14 @@ export default class Home extends Component {
                         <h2>Select From The Menu</h2>
                     </Grid>
                     {menuItems && menuItems.map((item) => {
-                        return <ItemCard item={item}/>
+                        return <ItemCard  key={item.id} item={item}/>
                     })}
                 </Grid>
                 <Grid
                     container item xs={12} md={3}
                     direction="row"
-                    justify="center"
-                    alignItems="center"
                 >
-
+                    <Cart/>
                 </Grid>
             </Grid>
 
