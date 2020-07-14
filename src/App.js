@@ -16,7 +16,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, UpdateCart)
 
 const store = createStore(
-    persistedReducer,git
+    persistedReducer,
 );
 
 const persistor = persistStore(store)

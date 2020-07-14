@@ -4,7 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import ItemCard from '../../general/ItemCard';
 import Api from "../../../api/Api";
 import Cart from "../../general/Cart";
-import ListItem from "@material-ui/core/ListItem";
+
+
 
 export default class Home extends Component {
 
