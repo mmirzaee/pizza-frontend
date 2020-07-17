@@ -12,10 +12,19 @@ code {
     monospace;
 }
 
+.root-container {
+    padding-top: 80px;
+}
+
+.MuiGrid-spacing-xs-5 {
+    margin: 0 !important;
+}
+
 .menu-container-style {
     position: fixed;
     width: 100%;
     z-index: 2;
+    top: 0;
 }
 
 .menu-style {
@@ -24,4 +33,47 @@ code {
     background: #ff4b1f; /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #ff9068, #ff4b1f); /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #ff9068, #ff4b1f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.cart ul {
+    background: linear-gradient(to right, #ff906861, #ff4b1f5c);
+    border-radius: 4px;
+    box-shadow: 0 3px 7px 1px #bbbbbb50 !important;
+}
+
+@media (max-width: 1279px) {
+    .cart.cart-visible ul {
+        position: fixed;
+        z-index: 999;
+        background: #fff;
+        top: -20px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .cart.cart-visible ul .MuiIconButton-root {
+        display: inline-block !important;
+        padding: 6px;
+    }
+
+    .cart.cart-visible ul .MuiSvgIcon-root {
+        width: 0.7em;
+    }
+
+    .cart.cart-visible ul .MuiListItemSecondaryAction-root {
+        font-size: 10px;
+    }
+}
+
+.font-300 {
+    font-weight: 300;
+}
+
+.MuiPaper-elevation4, .MuiPaper-elevation1 {
+    box-shadow: 0 3px 7px 1px #bbbbbb50 !important;
+}
+
+a {
+    text-decoration: none;
 }

@@ -6,28 +6,42 @@ import Api from "../../../api/Api";
 import Cart from "../../general/Cart";
 
 
-
 export default class Home extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {menuItems: null}
+        this.state = {menuItems: null, showCart: false}
     }
 
     componentDidMount() {
         Api.getMenu().then((res) => {
             this.setState({menuItems: res})
         })
+
+        Api.getExchangeRate().then((res) => {
+            this.setState({exchangeRate: res})
+        })
     }
 
 
     render() {
-        const {menuItems} = this.state;
+        const {menuItems, showCart, exchangeRate} = this.state;
+        const getCartClasses = () => {
+            return "cart " + (showCart ? "cart-visible" : "");
+        }
+
+        const openCart = () => {
+            this.setState({showCart: true});
+        }
+
+        const closeCart = () => {
+            this.setState({showCart: false});
+        }
         return <>
-            <Menu/>
-            <Grid container spacing={3}>
+            <Menu onClickCart={openCart}/>
+            <Grid container>
                 <Grid
-                    container item xs={12} md={9} spacing={5}
+                    container item xs={12} lg={9} spacing={5}
                     direction="row"
                     justify="center"
                     alignItems="center"
@@ -39,17 +53,18 @@ export default class Home extends Component {
                         alignItems="center"
 
                     >
-                        <h2>Select From The Menu</h2>
+                        <h2 class="font-300">Select From The Menu</h2>
                     </Grid>
                     {menuItems && menuItems.map((item) => {
-                        return <ItemCard  key={item.id} item={item}/>
+                        return <ItemCard key={item.id} item={item}/>
                     })}
                 </Grid>
                 <Grid
-                    container item xs={12} md={3}
+                    container item xs={0} lg={3}
                     direction="row"
+                    className={getCartClasses()}
                 >
-                    <Cart/>
+                    <Cart exchangeRate={exchangeRate} onClose={closeCart}/>
                 </Grid>
             </Grid>
 

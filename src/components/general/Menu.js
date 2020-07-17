@@ -1,9 +1,10 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import MenuIcon from '@material-ui/icons/Menu';
+import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import {AppBar, Toolbar, Hidden, IconButton} from '@material-ui/core';
+import {AppBar, Toolbar, Hidden, IconButton, Badge} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
+import {connect} from "react-redux";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -18,21 +19,32 @@ const useStyles = makeStyles(theme => ({
     logo: {
         height: '50px',
         width: '50px',
-        marginTop: '7px'
+        marginTop: '-6px'
     },
     siteName: {
         display: 'inline',
         fontSize: '20px',
         float: 'right',
-        marginTop: '20px',
-        color: '#ffffff'
+        marginTop: '6px',
+        color: '#ffffff',
+        fontWeight: '300'
     }
 }));
 
-function Menu(props) {
-    const {onSidebarOpen, onClickProfile} = props;
-    const classes = useStyles();
+const mapStateToProps = (state) => ({
+    items: state.items,
+})
 
+function Menu(props) {
+    const {onClickCart, onClickProfile} = props;
+    const classes = useStyles();
+    const getItemsCount = () => {
+        let count = 0;
+        props.items.map(i => {
+            count += i.quantity;
+        });
+        return count;
+    };
     return (
         <div className="menu-container-style">
             <AppBar position="static">
@@ -54,9 +66,11 @@ function Menu(props) {
                     <Hidden lgUp>
                         <IconButton
                             color="inherit"
-                            onClick={onSidebarOpen}
+                            onClick={onClickCart}
                         >
-                            <MenuIcon/>
+                            <Badge badgeContent={getItemsCount()} color="primary">
+                                <ShoppingBasketIcon/>
+                            </Badge>
                         </IconButton>
                     </Hidden>
                 </Toolbar>
@@ -65,4 +79,4 @@ function Menu(props) {
     )
 }
 
-export default Menu
+export default connect(mapStateToProps)(Menu);

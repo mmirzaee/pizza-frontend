@@ -10,23 +10,23 @@ import RemoveIcon from '@material-ui/icons/Remove';
 
 
 function OrderItem(props) {
-    const add = ()=>{
+    const add = () => {
         props.add(props.data)
     }
 
-    const remove = ()=>{
+    const remove = () => {
         props.remove(props.data)
     }
 
     const labelId = `checkbox-list-secondary-label-${props.data.id}`;
     return (
-        <ListItem button>
+        <ListItem>
             <ListItemAvatar>
                 <Avatar
                     src={props.data.image_url}
                 />
             </ListItemAvatar>
-            <ListItemText id={labelId} primary={props.data.title}/>
+            <ListItemText id={labelId} primary={props.data.title + ' ($' + props.data.price + ')'}/>
             <ListItemSecondaryAction>
                 <IconButton onClick={remove}>
                     <RemoveIcon/>

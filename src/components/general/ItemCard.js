@@ -66,7 +66,7 @@ function ItemCard(props) {
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.actions}>
-                    <span>$ {price}</span>
+                    <span>${price}</span>
                     <IconButton onClick={addToItems}>
                         <AddShoppingCartIcon/>
                     </IconButton>
