@@ -10,7 +10,7 @@ export default class Home extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {menuItems: null, showCart: false}
+        this.state = {menuItems: null, showCart: false, exchangeRate: 0}
     }
 
     componentDidMount() {
@@ -38,7 +38,7 @@ export default class Home extends Component {
             this.setState({showCart: false});
         }
         return <>
-            <Menu onClickCart={openCart}/>
+            <Menu showCart={true} onClickCart={openCart}/>
             <Grid container>
                 <Grid
                     container item xs={12} lg={9} spacing={5}
@@ -64,7 +64,7 @@ export default class Home extends Component {
                     direction="row"
                     className={getCartClasses()}
                 >
-                    <Cart exchangeRate={exchangeRate} onClose={closeCart}/>
+                    <Cart editable={true} exchangeRate={exchangeRate} onClose={closeCart}/>
                 </Grid>
             </Grid>
 

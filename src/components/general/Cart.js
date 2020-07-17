@@ -14,13 +14,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        width: 'calc(26%)',
-        position: 'fixed',
-        marginTop: '15px',
-        paddingBottom: '20px',
-    },
-    close:{
+    close: {
         display: 'none',
         padding: '16px',
     }
@@ -64,7 +58,7 @@ function Cart(props) {
 
 
     return (
-        <List dense className={classes.root}>
+        <List dense>
             <IconButton onClick={props.onClose} className={classes.close}>
                 <CloseIcon/>
             </IconButton>
@@ -82,7 +76,8 @@ function Cart(props) {
             <ListItem>No item is in your cart 🧐</ListItem>
             }
 
-            {props.items.map((i) => <OrderItem key={i.id} data={i} add={add} remove={remove}/>
+            {props.items.map((i) => <OrderItem key={i.id} data={i} add={add} remove={remove}
+                                               editable={props.editable}/>
             )}
 
             {props.items.length > 0 &&
@@ -90,11 +85,13 @@ function Cart(props) {
                 <ListItem>Delivery Fee: ${getDeliveryFee()}</ListItem>
                 <ListItem>
                     Total: {getTotal()}
+                    {props.editable &&
                     <ListItemSecondaryAction>
                         <Link to="/checkout">
                             <Button variant="outlined" color="secondary">Checkout</Button>
                         </Link>
                     </ListItemSecondaryAction>
+                    }
                 </ListItem>
             </>
             }

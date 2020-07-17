@@ -63,6 +63,7 @@ function Menu(props) {
                     >
                         <AccountCircleIcon/>
                     </IconButton>
+                    {props.showCart &&
                     <Hidden lgUp>
                         <IconButton
                             color="inherit"
@@ -73,6 +74,7 @@ function Menu(props) {
                             </Badge>
                         </IconButton>
                     </Hidden>
+                    }
                 </Toolbar>
             </AppBar>
         </div>

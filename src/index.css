@@ -39,6 +39,12 @@ code {
     background: linear-gradient(to right, #ff906861, #ff4b1f5c);
     border-radius: 4px;
     box-shadow: 0 3px 7px 1px #bbbbbb50 !important;
+    width: calc(26%);
+     position: fixed;
+    min-width: 345px;
+    margin-top: 15px;
+    padding-bottom: 20px;
+
 }
 
 @media (max-width: 1279px) {
@@ -76,4 +82,8 @@ code {
 
 a {
     text-decoration: none;
+}
+
+span.MuiTypography-root.MuiListItemText-primary.MuiTypography-body2.MuiTypography-displayBlock {
+    font-size: 12px;
 }

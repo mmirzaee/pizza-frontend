@@ -28,13 +28,17 @@ function OrderItem(props) {
             </ListItemAvatar>
             <ListItemText id={labelId} primary={props.data.title + ' ($' + props.data.price + ')'}/>
             <ListItemSecondaryAction>
+                {props.editable &&
                 <IconButton onClick={remove}>
                     <RemoveIcon/>
                 </IconButton>
+                }
                 <span>{props.data.quantity}</span>
+                {props.editable &&
                 <IconButton onClick={add}>
                     <AddIcon/>
                 </IconButton>
+                }
             </ListItemSecondaryAction>
         </ListItem>
     );
