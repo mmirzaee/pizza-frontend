@@ -5,13 +5,37 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import {AppBar, Toolbar, Hidden, IconButton, Badge} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import {connect} from "react-redux";
-import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField/TextField";
 import DialogActions from "@material-ui/core/DialogActions/DialogActions";
 import Button from "@material-ui/core/Button";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 import Dialog from "@material-ui/core/Dialog/Dialog";
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+
+
+function TabPanel(props) {
+    const {children, value, index, ...other} = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`full-width-tabpanel-${index}`}
+            aria-labelledby={`full-width-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
 
 
 const useStyles = makeStyles(theme => ({
@@ -44,6 +68,13 @@ const mapStateToProps = (state) => ({
     profile: state.profile,
 })
 
+function a11yProps(index) {
+    return {
+        id: `full-width-tab-${index}`,
+        'aria-controls': `full-width-tabpanel-${index}`,
+    };
+}
+
 function Menu(props) {
     const [open, setOpen] = React.useState(false);
     const onClickProfile = () => {
@@ -62,6 +93,16 @@ function Menu(props) {
         });
         return count;
     };
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+    const handleChangeIndex = (index) => {
+        setValue(index);
+    };
+
     return (
         <>
             <div className="menu-container-style">
@@ -97,35 +138,85 @@ function Menu(props) {
                 </AppBar>
             </div>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Login</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Enter your username & password
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="Username"
-                        label="Username"
-                        type="text"
-                        fullWidth
-                    />
-                    <TextField
-                        margin="dense"
-                        id="password"
-                        label="Password"
-                        type="password"
-                        fullWidth
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleClose} color="primary">
-                        Login
-                    </Button>
-                </DialogActions>
+                <AppBar position="static" color="default">
+                    <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="fullWidth"
+                    >
+                        <Tab label="Login" {...a11yProps(0)}/>
+                        <Tab label="Register" {...a11yProps(1)}/>
+                    </Tabs>
+                </AppBar>
+                <TabPanel value={value} index={0}>
+                    <DialogContent>
+                        <DialogContentText>
+                            Enter your username & password
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="Username"
+                            label="Username"
+                            type="text"
+                            fullWidth
+                        />
+                        <TextField
+                            margin="dense"
+                            id="password"
+                            label="Password"
+                            type="password"
+                            fullWidth
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color="secondary">
+                            Cancel
+                        </Button>
+                        <Button onClick={handleClose} color="primary">
+                            Login
+                        </Button>
+                    </DialogActions>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                    <DialogContent>
+                        <DialogContentText>
+                            Sign Up easily!
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="Email"
+                            label="Email"
+                            type="text"
+                            fullWidth
+                        />
+                        <TextField
+                            margin="dense"
+                            id="Username"
+                            label="Username"
+                            type="text"
+                            fullWidth
+                        />
+                        <TextField
+                            margin="dense"
+                            id="Password"
+                            label="Password"
+                            type="password"
+                            fullWidth
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color="secondary">
+                            Cancel
+                        </Button>
+                        <Button onClick={handleClose} color="primary">
+                            Register
+                        </Button>
+                    </DialogActions>
+                </TabPanel>
             </Dialog>
         </>
     )
