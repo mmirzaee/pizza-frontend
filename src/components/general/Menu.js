@@ -5,6 +5,14 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import {AppBar, Toolbar, Hidden, IconButton, Badge} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import {connect} from "react-redux";
+import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import TextField from "@material-ui/core/TextField/TextField";
+import DialogActions from "@material-ui/core/DialogActions/DialogActions";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog/Dialog";
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -33,10 +41,19 @@ const useStyles = makeStyles(theme => ({
 
 const mapStateToProps = (state) => ({
     items: state.items,
+    profile: state.profile,
 })
 
 function Menu(props) {
-    const {onClickCart, onClickProfile} = props;
+    const [open, setOpen] = React.useState(false);
+    const onClickProfile = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const {onClickCart} = props;
     const classes = useStyles();
     const getItemsCount = () => {
         let count = 0;
@@ -46,38 +63,71 @@ function Menu(props) {
         return count;
     };
     return (
-        <div className="menu-container-style">
-            <AppBar position="static">
-                <Toolbar className="menu-style">
-                    <div>
-                        <Link className="menu-link-style" to={'/'}>
-                            <img src="https://github.com/mmirzaee/pizza-backend/raw/master/pizza.png"
-                                 className={classes.logo}/>
-                            <h1 className={classes.siteName}>InnoPizza</h1>
-                        </Link>
-                    </div>
-                    <div className={classes.flexGrow}/>
-                    <IconButton
-                        color="inherit"
-                        onClick={onClickProfile}
-                    >
-                        <AccountCircleIcon/>
-                    </IconButton>
-                    {props.showCart &&
-                    <Hidden lgUp>
+        <>
+            <div className="menu-container-style">
+                <AppBar position="static">
+                    <Toolbar className="menu-style">
+                        <div>
+                            <Link className="menu-link-style" to={'/'}>
+                                <img src="https://github.com/mmirzaee/pizza-backend/raw/master/pizza.png"
+                                     className={classes.logo}/>
+                                <h1 className={classes.siteName}>InnoPizza</h1>
+                            </Link>
+                        </div>
+                        <div className={classes.flexGrow}/>
                         <IconButton
                             color="inherit"
-                            onClick={onClickCart}
+                            onClick={onClickProfile}
                         >
-                            <Badge badgeContent={getItemsCount()} color="primary">
-                                <ShoppingBasketIcon/>
-                            </Badge>
+                            <AccountCircleIcon/>
                         </IconButton>
-                    </Hidden>
-                    }
-                </Toolbar>
-            </AppBar>
-        </div>
+                        {props.showCart &&
+                        <Hidden lgUp>
+                            <IconButton
+                                color="inherit"
+                                onClick={onClickCart}
+                            >
+                                <Badge badgeContent={getItemsCount()} color="primary">
+                                    <ShoppingBasketIcon/>
+                                </Badge>
+                            </IconButton>
+                        </Hidden>
+                        }
+                    </Toolbar>
+                </AppBar>
+            </div>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Login</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Enter your username & password
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="Username"
+                        label="Username"
+                        type="text"
+                        fullWidth
+                    />
+                    <TextField
+                        margin="dense"
+                        id="password"
+                        label="Password"
+                        type="password"
+                        fullWidth
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleClose} color="primary">
+                        Login
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </>
     )
 }
 

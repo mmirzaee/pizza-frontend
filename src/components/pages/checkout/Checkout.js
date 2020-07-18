@@ -68,8 +68,11 @@ class Checkout extends Component {
         this.setState({isLoading: true})
         Api.sendOrder(postData).then((res) => {
             this.setState({isLoading: false, showSuccess: true}, () => {
-                this.props.dispatch(updateCartAction([]));
-                this.props.history.push('/');
+                setTimeout(() => {
+                    this.props.dispatch(updateCartAction([]));
+                    this.props.history.push('/');
+                }, 3000);
+
             });
 
         })
@@ -86,21 +89,21 @@ class Checkout extends Component {
                       direction="row"
                       justify="center"
                 >
-                    <Grid container xs={12}
+                    <Grid container xs={12} spacing={2}
                           direction="row"
                           justify="center"
                     >
                         <h2 className="font-300">Your Cart - Complete order fields:</h2>
                     </Grid>
                     <Grid
-                        container xs={12} lg={6}
+                        container xs={12} lg={6} spacing={5}
                         justify="center"
                     >
                         <Cart editable={false} exchangeRate={exchangeRate}/>
                     </Grid>
-                    <Grid xs={12} lg={6} container
+                    <Grid xs={12} lg={6} container spacing={5}
                     >
-                        <Grid container xs={12} lg={6} item spacing={5}
+                        <Grid container xs={12} lg={6} item
                               direction="row"
                               justify="center"
                               alignItems="center"
@@ -114,7 +117,7 @@ class Checkout extends Component {
                                 onChange={this.handleChangeFullName}
                             />
                         </Grid>
-                        <Grid container xs={12} lg={6} item spacing={5}
+                        <Grid container xs={12} lg={6} item
                               direction="row"
                               justify="center"
                               alignItems="center"
@@ -128,9 +131,9 @@ class Checkout extends Component {
                                 onChange={this.handleChangeMobile}
                             />
                         </Grid>
-                        <Grid container xs={12}
-                              justify="center"
+                        <Grid xs={12} container spacing={5} item
                         >
+
                             <TextField
                                 required
                                 label="Address"
@@ -143,8 +146,9 @@ class Checkout extends Component {
                             />
                         </Grid>
                     </Grid>
+
                     <Grid container xs={12}
-                          justify="center"
+                          justify="center" spacing={5}
                     >
                         <Button variant="outlined" color="secondary" onClick={this.submit} disabled={isLoading}>
                             {isLoading &&
@@ -155,9 +159,16 @@ class Checkout extends Component {
                     </Grid>
                 </Grid>
             </Container>
-            <Snackbar open={showSuccess} onClose={this.handleCloseAlert} autoHideDuration={6000}>
-                <Alert onClose={this.handleCloseAlert} severity="success">
-                    This is a success message!
+            <Snackbar
+                open={showSuccess}
+                onClose={this.handleCloseAlert}
+                autoHideDuration={6000}>
+                <Alert
+                    onClose={this.handleCloseAlert}
+                    severity="success">
+                    Order
+                    submitted
+                    successfully
                 </Alert>
             </Snackbar>
         </>
