@@ -14,8 +14,13 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-
+import Alert from '@material-ui/lab/Alert';
+import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
+import Api from "../../api/Api";
+import {updateTokenAction} from "../../actions/UpdateTokenAction";
+import {updateProfileAction} from "../../actions/UpdateProfileAction";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import HistoryIcon from '@material-ui/icons/History';
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -30,7 +35,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box>
-                    <Typography>{children}</Typography>
+                    {children}
                 </Box>
             )}
         </div>
@@ -60,12 +65,16 @@ const useStyles = makeStyles(theme => ({
         marginTop: '6px',
         color: '#ffffff',
         fontWeight: '300'
+    },
+    colorWhite: {
+        color: '#ffffff'
     }
 }));
 
 const mapStateToProps = (state) => ({
     items: state.items,
     profile: state.profile,
+    token: state.token,
 })
 
 function a11yProps(index) {
@@ -76,31 +85,84 @@ function a11yProps(index) {
 }
 
 function Menu(props) {
+    const {onClickCart, token, profile} = props;
+    const classes = useStyles();
+
     const [open, setOpen] = React.useState(false);
     const onClickProfile = () => {
-        setOpen(true);
+        if (!token) {
+            setOpen(true);
+        } else {
+            props.dispatch(updateProfileAction({}));
+            props.dispatch(updateTokenAction(null));
+        }
     };
-    const handleClose = () => {
+    const handleLoginDialogClose = () => {
         setOpen(false);
     };
 
-    const {onClickCart} = props;
-    const classes = useStyles();
+    const [value, setValue] = React.useState(0);
+    const handleTabChange = (event, newValue) => {
+        setLoginError(false);
+        setValue(newValue);
+    };
+
+    const [username, setUsername] = React.useState();
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value);
+    };
+    const [password, setPassword] = React.useState();
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    };
+    const [email, setEmail] = React.useState();
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+    };
+
+
+    const [isLoadingDialog, setIsLoadingDialog] = React.useState(false);
+    const [loginError, setLoginError] = React.useState(false);
+
+
+    const handleRegister = () => {
+        setLoginError(false);
+        setIsLoadingDialog(true);
+        Api.postRegister({username: username, password: password, email: email}).then(data => {
+            props.dispatch(updateTokenAction(data.token));
+            Api.getProfile(data.token).then(data => {
+                props.dispatch(updateProfileAction(data));
+            });
+            setIsLoadingDialog(false);
+            handleLoginDialogClose();
+        }).catch(() => {
+            setLoginError(true);
+            setIsLoadingDialog(false);
+        });
+    }
+
+    const handleLogin = () => {
+        setLoginError(false);
+        setIsLoadingDialog(true);
+        Api.postLogin({username: username, password: password}).then(data => {
+            props.dispatch(updateTokenAction(data.token));
+            Api.getProfile(data.token).then(data => {
+                props.dispatch(updateProfileAction(data));
+            });
+            setIsLoadingDialog(false);
+            handleLoginDialogClose();
+        }).catch(() => {
+            setLoginError(true);
+            setIsLoadingDialog(false);
+        });
+    }
+
     const getItemsCount = () => {
         let count = 0;
         props.items.map(i => {
             count += i.quantity;
         });
         return count;
-    };
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-
-    const handleChangeIndex = (index) => {
-        setValue(index);
     };
 
     return (
@@ -116,11 +178,26 @@ function Menu(props) {
                             </Link>
                         </div>
                         <div className={classes.flexGrow}/>
+                        {token &&
+                        <Link to={'/history'}>
+                            <IconButton
+                                className={classes.colorWhite}
+                                color="inherit"
+                            >
+                                <HistoryIcon/>
+                            </IconButton>
+                        </Link>
+                        }
                         <IconButton
                             color="inherit"
                             onClick={onClickProfile}
                         >
+                            {!token &&
                             <AccountCircleIcon/>
+                            }
+                            {token &&
+                            <ExitToAppIcon/>
+                            }
                         </IconButton>
                         {props.showCart &&
                         <Hidden lgUp>
@@ -137,11 +214,12 @@ function Menu(props) {
                     </Toolbar>
                 </AppBar>
             </div>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+
+            <Dialog open={open} onClose={handleLoginDialogClose} maxWidth={'xs'} fullWidth={true}>
                 <AppBar position="static" color="default">
                     <Tabs
                         value={value}
-                        onChange={handleChange}
+                        onChange={handleTabChange}
                         indicatorColor="primary"
                         textColor="primary"
                         variant="fullWidth"
@@ -154,6 +232,9 @@ function Menu(props) {
                     <DialogContent>
                         <DialogContentText>
                             Enter your username & password
+                            {loginError &&
+                            <Alert severity="error">Invalid Username/Password</Alert>
+                            }
                         </DialogContentText>
                         <TextField
                             autoFocus
@@ -162,6 +243,8 @@ function Menu(props) {
                             label="Username"
                             type="text"
                             fullWidth
+                            value={username}
+                            onChange={handleUsernameChange}
                         />
                         <TextField
                             margin="dense"
@@ -169,14 +252,19 @@ function Menu(props) {
                             label="Password"
                             type="password"
                             fullWidth
+                            value={password}
+                            onChange={handlePasswordChange}
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} color="secondary">
+                        <Button onClick={handleLoginDialogClose} color="secondary">
                             Cancel
                         </Button>
-                        <Button onClick={handleClose} color="primary">
+                        <Button onClick={handleLogin} color="primary">
                             Login
+                            {isLoadingDialog &&
+                            <CircularProgress color="inherit"/>
+                            }
                         </Button>
                     </DialogActions>
                 </TabPanel>
@@ -184,14 +272,19 @@ function Menu(props) {
                     <DialogContent>
                         <DialogContentText>
                             Sign Up easily!
+                            {loginError &&
+                            <Alert severity="error">Entered informations are not valid</Alert>
+                            }
                         </DialogContentText>
                         <TextField
                             autoFocus
                             margin="dense"
                             id="Email"
                             label="Email"
-                            type="text"
+                            type="email"
                             fullWidth
+                            value={email}
+                            onChange={handleEmailChange}
                         />
                         <TextField
                             margin="dense"
@@ -199,6 +292,8 @@ function Menu(props) {
                             label="Username"
                             type="text"
                             fullWidth
+                            value={username}
+                            onChange={handleUsernameChange}
                         />
                         <TextField
                             margin="dense"
@@ -206,14 +301,19 @@ function Menu(props) {
                             label="Password"
                             type="password"
                             fullWidth
+                            value={password}
+                            onChange={handlePasswordChange}
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} color="secondary">
+                        <Button onClick={handleLoginDialogClose} color="secondary">
                             Cancel
                         </Button>
-                        <Button onClick={handleClose} color="primary">
+                        <Button onClick={handleRegister} color="primary">
                             Register
+                            {isLoadingDialog &&
+                            <CircularProgress color="inherit"/>
+                            }
                         </Button>
                     </DialogActions>
                 </TabPanel>

@@ -26,7 +26,7 @@ function App() {
     return (
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-                <div class="root-container">
+                <div className="root-container">
                     <Router>
                         <Route exact path="/" component={Home}/>
                         <Route exact path="/checkout" component={Checkout}/>

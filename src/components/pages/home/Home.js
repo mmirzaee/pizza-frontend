@@ -53,7 +53,7 @@ export default class Home extends Component {
                         alignItems="center"
 
                     >
-                        <h2 class="font-300">Select From The Menu</h2>
+                        <h2 className="font-300">Select From The Menu</h2>
                     </Grid>
                     {menuItems && menuItems.map((item) => {
                         return <ItemCard key={item.id} item={item}/>

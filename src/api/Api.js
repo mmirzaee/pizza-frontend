@@ -20,13 +20,37 @@ const Api = {
     },
     sendOrder(data) {
         const params = new URLSearchParams();
-        Object.keys(data).map(i=>{
+        Object.keys(data).map(i => {
             params.append(i, data[i]);
         });
         return axios.post(baseUrl + '/orders/place-order', params, config).then(response => {
             return response.data;
         }).catch(err => console.log(err))
-    }
+    },
+    postLogin(data) {
+        const params = new URLSearchParams();
+        Object.keys(data).map(i => {
+            params.append(i, data[i]);
+        });
+        return axios.post(baseUrl + '/auth/login', params, config).then(response => {
+            return response.data;
+        })
+    },
+    postRegister(data) {
+        const params = new URLSearchParams();
+        Object.keys(data).map(i => {
+            params.append(i, data[i]);
+        });
+        return axios.post(baseUrl + '/auth/signup', params, config).then(response => {
+            return response.data;
+        })
+    },
+    getProfile(token) {
+        const configWithToken = {headers: {Authorization: 'Bearer ' + token, ...(config.headers)}};
+        return axios.get(baseUrl + '/auth/profile', configWithToken).then(response => {
+            return response.data;
+        }).catch(err => console.log(err))
+    },
 };
 
 export default Api

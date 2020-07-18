@@ -85,23 +85,23 @@ class Checkout extends Component {
         return <>
             <Menu showCart={false}/>
             <Container fixed>
-                <Grid container xs={12}
+                <Grid container item xs={12}
                       direction="row"
                       justify="center"
                 >
-                    <Grid container xs={12} spacing={2}
+                    <Grid container item xs={12} spacing={2}
                           direction="row"
                           justify="center"
                     >
                         <h2 className="font-300">Your Cart - Complete order fields:</h2>
                     </Grid>
                     <Grid
-                        container xs={12} lg={6} spacing={5}
+                        container item xs={12} lg={6} spacing={5}
                         justify="center"
                     >
                         <Cart editable={false} exchangeRate={exchangeRate}/>
                     </Grid>
-                    <Grid xs={12} lg={6} container spacing={5}
+                    <Grid xs={12} lg={6} container item spacing={5}
                     >
                         <Grid container xs={12} lg={6} item
                               direction="row"
@@ -113,7 +113,7 @@ class Checkout extends Component {
                                 label="Full Name"
                                 variant="outlined"
                                 fullWidth
-                                disabled={isLoading}
+                                disabled={isLoading || this.props.items.length == 0}
                                 onChange={this.handleChangeFullName}
                             />
                         </Grid>
@@ -127,7 +127,7 @@ class Checkout extends Component {
                                 label="Mobile Number"
                                 variant="outlined"
                                 fullWidth
-                                disabled={isLoading}
+                                disabled={isLoading || this.props.items.length == 0}
                                 onChange={this.handleChangeMobile}
                             />
                         </Grid>
@@ -141,16 +141,17 @@ class Checkout extends Component {
                                 multiline
                                 fullWidth
                                 rows={4}
-                                disabled={isLoading}
+                                disabled={isLoading || this.props.items.length == 0}
                                 onChange={this.handleChangeAddress}
                             />
                         </Grid>
                     </Grid>
 
-                    <Grid container xs={12}
+                    <Grid container item xs={12}
                           justify="center" spacing={5}
                     >
-                        <Button variant="outlined" color="secondary" onClick={this.submit} disabled={isLoading}>
+                        <Button variant="outlined" color="secondary" onClick={this.submit}
+                                disabled={isLoading || this.props.items.length == 0}>
                             {isLoading &&
                             <CircularProgress color="inherit"/>
                             }

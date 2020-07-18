@@ -69,7 +69,7 @@ function Cart(props) {
                 alignItems="center"
 
             >
-                <h2 class="font-300">Your cart items:</h2>
+                <h2 className="font-300">Your cart items:</h2>
             </Grid>
 
             {props.items.length == 0 &&
