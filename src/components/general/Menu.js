@@ -85,77 +85,71 @@ function a11yProps(index) {
 }
 
 function Menu(props) {
-    const {onClickCart, token, profile} = props;
+
+    const {onClickCart, token} = props;
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
-    const onClickProfile = () => {
-        if (!token) {
-            setOpen(true);
-        } else {
-            props.dispatch(updateProfileAction({}));
-            props.dispatch(updateTokenAction(null));
-        }
+    const [value, setValue] = React.useState(0);
+    const [username, setUsername] = React.useState();
+    const [password, setPassword] = React.useState();
+    const [email, setEmail] = React.useState();
+    const [isLoadingDialog, setIsLoadingDialog] = React.useState(false);
+    const [loginError, setLoginError] = React.useState(false);
+
+    const login = () => {
+          setOpen(true);
     };
+
+    const logout = () => {
+          props.dispatch(updateProfileAction({}));
+          props.dispatch(updateTokenAction(null));
+    };
+
     const handleLoginDialogClose = () => {
         setOpen(false);
     };
 
-    const [value, setValue] = React.useState(0);
     const handleTabChange = (event, newValue) => {
         setLoginError(false);
         setValue(newValue);
     };
 
-    const [username, setUsername] = React.useState();
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);
     };
-    const [password, setPassword] = React.useState();
+
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
     };
-    const [email, setEmail] = React.useState();
+
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
     };
 
-
-    const [isLoadingDialog, setIsLoadingDialog] = React.useState(false);
-    const [loginError, setLoginError] = React.useState(false);
-
+    const handleAuth = (api) => {
+        setLoginError(false);
+        setIsLoadingDialog(true);
+        api({username: username, password: password, email: email}).then(data => {
+            props.dispatch(updateTokenAction(data.token));
+            Api.getProfile(data.token).then(data => {
+                props.dispatch(updateProfileAction(data));
+            });
+            setIsLoadingDialog(false);
+            handleLoginDialogClose();
+        }).catch(() => {
+            setLoginError(true);
+            setIsLoadingDialog(false);
+        });
+    };
 
     const handleRegister = () => {
-        setLoginError(false);
-        setIsLoadingDialog(true);
-        Api.postRegister({username: username, password: password, email: email}).then(data => {
-            props.dispatch(updateTokenAction(data.token));
-            Api.getProfile(data.token).then(data => {
-                props.dispatch(updateProfileAction(data));
-            });
-            setIsLoadingDialog(false);
-            handleLoginDialogClose();
-        }).catch(() => {
-            setLoginError(true);
-            setIsLoadingDialog(false);
-        });
-    }
+        handleAuth(Api.postRegister);
+    };
 
     const handleLogin = () => {
-        setLoginError(false);
-        setIsLoadingDialog(true);
-        Api.postLogin({username: username, password: password}).then(data => {
-            props.dispatch(updateTokenAction(data.token));
-            Api.getProfile(data.token).then(data => {
-                props.dispatch(updateProfileAction(data));
-            });
-            setIsLoadingDialog(false);
-            handleLoginDialogClose();
-        }).catch(() => {
-            setLoginError(true);
-            setIsLoadingDialog(false);
-        });
-    }
+        handleAuth(Api.postLogin);
+    };
 
     const getItemsCount = () => {
         let count = 0;
@@ -179,7 +173,7 @@ function Menu(props) {
                         </div>
                         <div className={classes.flexGrow}/>
                         {token &&
-                        <Link to={'/history'}>
+                        <Link to={'/orders'}>
                             <IconButton
                                 className={classes.colorWhite}
                                 color="inherit"
@@ -188,17 +182,18 @@ function Menu(props) {
                             </IconButton>
                         </Link>
                         }
-                        <IconButton
+                        {!token ?  <IconButton
                             color="inherit"
-                            onClick={onClickProfile}
+                            onClick={login}
                         >
-                            {!token &&
                             <AccountCircleIcon/>
-                            }
-                            {token &&
+                        </IconButton> : <IconButton
+                            color="inherit"
+                            onClick={logout}
+                        >
                             <ExitToAppIcon/>
-                            }
                         </IconButton>
+                            }
                         {props.showCart &&
                         <Hidden lgUp>
                             <IconButton
@@ -232,10 +227,10 @@ function Menu(props) {
                     <DialogContent>
                         <DialogContentText>
                             Enter your username & password
-                            {loginError &&
-                            <Alert severity="error">Invalid Username/Password</Alert>
-                            }
                         </DialogContentText>
+                        {loginError &&
+                        <Alert severity="error">Invalid Username/Password</Alert>
+                        }
                         <TextField
                             autoFocus
                             margin="dense"
@@ -272,10 +267,10 @@ function Menu(props) {
                     <DialogContent>
                         <DialogContentText>
                             Sign Up easily!
-                            {loginError &&
-                            <Alert severity="error">Entered informations are not valid</Alert>
-                            }
                         </DialogContentText>
+                        {loginError &&
+                        <Alert severity="error">Entered data are not valid</Alert>
+                        }
                         <TextField
                             autoFocus
                             margin="dense"
