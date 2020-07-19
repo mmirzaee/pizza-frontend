@@ -26,7 +26,7 @@ const CartUtils = {
     remove(item, items) {
         let ret_items = items.reduce(
             (ret, i) => {
-                if (i.id == item.id) {
+                if (i.id === item.id) {
                     i.quantity--;
                     if (i.quantity > 0) {
                         ret.push(i)

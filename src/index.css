@@ -39,7 +39,7 @@ code {
     background: linear-gradient(to right, #ff906861, #ff4b1f5c);
     border-radius: 4px;
     box-shadow: 0 3px 7px 1px #bbbbbb50 !important;
-    width: calc(26%);
+    width: calc(24%);
      position: fixed;
     min-width: 345px;
     margin-top: 15px;

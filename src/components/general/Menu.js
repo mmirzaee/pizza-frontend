@@ -21,6 +21,8 @@ import {updateTokenAction} from "../../actions/UpdateTokenAction";
 import {updateProfileAction} from "../../actions/UpdateProfileAction";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import HistoryIcon from '@material-ui/icons/History';
+import {useSnackbar} from 'material-ui-snackbar-provider'
+
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -88,6 +90,7 @@ function Menu(props) {
 
     const {onClickCart, token} = props;
     const classes = useStyles();
+    const snackbar = useSnackbar();
 
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState(0);
@@ -104,6 +107,7 @@ function Menu(props) {
     const logout = () => {
           props.dispatch(updateProfileAction({}));
           props.dispatch(updateTokenAction(null));
+          snackbar.showMessage('Logged out')
     };
 
     const handleLoginDialogClose = () => {
@@ -134,6 +138,7 @@ function Menu(props) {
             props.dispatch(updateTokenAction(data.token));
             Api.getProfile(data.token).then(data => {
                 props.dispatch(updateProfileAction(data));
+                snackbar.showMessage('Logged in successfully')
             });
             setIsLoadingDialog(false);
             handleLoginDialogClose();

@@ -22,19 +22,20 @@ const useStyles = makeStyles((theme) => ({
 
 const mapStateToProps = (state) => ({
     items: state.items,
-})
+});
 
+const deliveryFee = 5;
 
 function Cart(props) {
     const classes = useStyles();
 
     const add = (i) => {
         props.dispatch(updateCartAction(CartUtils.add(i, props.items)));
-    }
+    };
 
     const remove = (i) => {
         props.dispatch(updateCartAction(CartUtils.remove(i, props.items)));
-    }
+    };
 
     const getTotal = () => {
         let total = 0;
@@ -42,7 +43,7 @@ function Cart(props) {
             total += i.price * i.quantity;
         });
 
-        total += getDeliveryFee();
+        total += deliveryFee;
         return total.toLocaleString('en-US', {
             style: 'currency',
             currency: 'USD',
@@ -50,12 +51,7 @@ function Cart(props) {
             style: 'currency',
             currency: 'EUR',
         })
-    }
-
-    const getDeliveryFee = () => {
-        return 5;
-    }
-
+    };
 
     return (
         <List dense>
@@ -82,7 +78,7 @@ function Cart(props) {
 
             {props.items.length > 0 &&
             <>
-                <ListItem>Delivery Fee: ${getDeliveryFee()}</ListItem>
+                <ListItem>Delivery Fee: {deliveryFee}</ListItem>
                 <ListItem>
                     Total: {getTotal()}
                     {props.editable &&

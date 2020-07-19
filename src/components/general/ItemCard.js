@@ -11,6 +11,8 @@ import Grid from "@material-ui/core/Grid";
 import {connect} from 'react-redux';
 import {updateCartAction} from '../../actions/UpdateCartAction';
 import CartUtils from '../../utils/CartUtils';
+import {useSnackbar} from 'material-ui-snackbar-provider'
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,15 +35,17 @@ const useStyles = makeStyles((theme) => ({
 
 const mapStateToProps = (state) => ({
     items: state.items,
-})
+});
 
 function ItemCard(props) {
     const classes = useStyles();
-    const {id, title, image_url, description, price} = props.item;
+    const snackbar = useSnackbar();
+    const {title, image_url, description, price} = props.item;
 
     const addToItems = () => {
         props.dispatch(updateCartAction(CartUtils.add(props.item, props.items)));
-    }
+        snackbar.showMessage(props.item.title+' added to cart')
+    };
 
     return (
         <Grid

@@ -12,11 +12,11 @@ import RemoveIcon from '@material-ui/icons/Remove';
 function OrderItem(props) {
     const add = () => {
         props.add(props.data)
-    }
+    };
 
     const remove = () => {
         props.remove(props.data)
-    }
+    };
 
     const labelId = `checkbox-list-secondary-label-${props.data.id}`;
     return (
