@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useEffect} from 'react';
 import Menu from "../../general/Menu";
 import {connect} from "react-redux";
 import {compose} from "redux";
@@ -15,75 +15,66 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {withRouter} from 'react-router-dom'
 import {updateCartAction} from "../../../actions/UpdateCartAction";
 
-
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-
 
 const mapStateToProps = (state) => ({
     items: state.items,
     token: state.token,
 });
 
-class Checkout extends Component {
+function Checkout(props) {
+    const [exchangeRate, setExchangeRate] = React.useState(0);
+    const [loading, setLoading] = React.useState(false);
+    const [fullName, setFullName] = React.useState('');
+    const [mobile, setMobile] = React.useState('');
+    const [address, setAddress] = React.useState('');
+    const [showSuccess, setShowSuccess] = React.useState(false);
 
-    constructor(props) {
-        super(props)
-        this.state = {exchangeRate: 0, isLoading: false, fullName: '', mobile: '', address: '', showSuccess: false}
-    }
-
-
-    componentDidMount() {
+    useEffect(() => {
         Api.getExchangeRate().then((res) => {
-            this.setState({exchangeRate: res})
+            setExchangeRate(res);
         })
-    }
+    }, []);
 
+   const handleChangeFullName = (event) => {
+       setFullName(event.target.value);
+    };
 
-    handleChangeFullName = (event) => {
-        this.setState({fullName: event.target.value});
-    }
-    handleChangeMobile = (event) => {
-        this.setState({mobile: event.target.value});
-    }
-    handleChangeAddress = (event) => {
-        this.setState({address: event.target.value});
-    }
-    handleCloseAlert = (event, reason) => {
+    const handleChangeMobile = (event) => {
+        setMobile(event.target.value);
+    };
+
+    const handleChangeAddress = (event) => {
+        setAddress(event.target.value);
+    };
+
+    const handleCloseAlert = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-        this.setState({showSuccess: false})
+        setShowSuccess(false);
     };
 
-    submit = () => {
-        const {fullName, mobile, address} = this.state;
-        const {token, items} = this.props;
-
+    const submit = () => {
+        const {token, items} = props;
         let postData = {
             full_name: fullName,
             mobile: mobile,
             address: address,
             items: CartUtils.toJson(items)
         };
-        this.setState({isLoading: true})
         Api.sendOrder(postData, token).then((res) => {
-            this.setState({isLoading: false, showSuccess: true}, () => {
-                setTimeout(() => {
-                    this.props.dispatch(updateCartAction([]));
-
-                    this.props.history.push(token ? '/history' : '/');
-                }, 3000);
-
-            });
+            setLoading(true);
+            setShowSuccess(true);
+            setTimeout(() => {
+                props.dispatch(updateCartAction([]));
+                props.history.push(token ? '/orders' : '/');
+            }, 3000);
 
         })
-    }
-
-
-    render() {
-        const {exchangeRate, isLoading, showSuccess} = this.state;
+    };
 
         return <>
             <Menu showCart={false}/>
@@ -116,8 +107,8 @@ class Checkout extends Component {
                                 label="Full Name"
                                 variant="outlined"
                                 fullWidth
-                                disabled={isLoading || this.props.items.length == 0}
-                                onChange={this.handleChangeFullName}
+                                disabled={loading || props.items.length == 0}
+                                onChange={handleChangeFullName}
                             />
                         </Grid>
                         <Grid container xs={12} lg={6} item
@@ -130,8 +121,8 @@ class Checkout extends Component {
                                 label="Mobile Number"
                                 variant="outlined"
                                 fullWidth
-                                disabled={isLoading || this.props.items.length == 0}
-                                onChange={this.handleChangeMobile}
+                                disabled={loading || props.items.length == 0}
+                                onChange={handleChangeMobile}
                             />
                         </Grid>
                         <Grid xs={12} container spacing={5} item
@@ -144,8 +135,8 @@ class Checkout extends Component {
                                 multiline
                                 fullWidth
                                 rows={4}
-                                disabled={isLoading || this.props.items.length == 0}
-                                onChange={this.handleChangeAddress}
+                                disabled={loading || props.items.length == 0}
+                                onChange={handleChangeAddress}
                             />
                         </Grid>
                     </Grid>
@@ -153,9 +144,9 @@ class Checkout extends Component {
                     <Grid container item xs={12}
                           justify="center" spacing={5}
                     >
-                        <Button variant="outlined" color="secondary" onClick={this.submit}
-                                disabled={isLoading || this.props.items.length == 0}>
-                            {isLoading &&
+                        <Button variant="outlined" color="secondary" onClick={submit}
+                                disabled={loading || props.items.length == 0}>
+                            {loading &&
                             <CircularProgress color="inherit"/>
                             }
                             Submit
@@ -165,10 +156,10 @@ class Checkout extends Component {
             </Container>
             <Snackbar
                 open={showSuccess}
-                onClose={this.handleCloseAlert}
+                onClose={handleCloseAlert}
                 autoHideDuration={6000}>
                 <Alert
-                    onClose={this.handleCloseAlert}
+                    onClose={handleCloseAlert}
                     severity="success">
                     Order
                     submitted
@@ -176,7 +167,6 @@ class Checkout extends Component {
                 </Alert>
             </Snackbar>
         </>
-    }
 }
 
 export default compose(
