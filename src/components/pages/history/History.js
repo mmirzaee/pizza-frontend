@@ -14,6 +14,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
+import Alert from '@material-ui/lab/Alert';
+
 
 const mapStateToProps = (state) => ({
     items: state.items,
@@ -38,6 +40,7 @@ class History extends Component {
 
     render() {
         const {isLoading, orderHistoryItems} = this.state;
+        const {token} = this.props;
         const statusEnum = {'1': 'Successfully Submitted', '2': 'In The Way', '3': 'Delivered', '0': 'Cancelled'};
         return <>
             <Menu showCart={true}/>
@@ -69,7 +72,7 @@ class History extends Component {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {orderHistoryItems.map((row) => (
+                                    {orderHistoryItems && orderHistoryItems.map((row) => (
                                         <TableRow key={row}>
                                             <TableCell component="th" scope="row">
                                                 {row.created_at}
@@ -95,6 +98,9 @@ class History extends Component {
                     </Grid>
 
                 </Grid>
+                {!token &&
+                <Alert fullWidth severity="info">Only logged in users can see their order history</Alert>
+                }
             </Container>
         </>
     }

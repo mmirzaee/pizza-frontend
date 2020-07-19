@@ -18,12 +18,17 @@ const Api = {
             return response.data;
         }).catch(err => console.log(err))
     },
-    sendOrder(data) {
+    sendOrder(data, token) {
         const params = new URLSearchParams();
         Object.keys(data).map(i => {
             params.append(i, data[i]);
         });
-        return axios.post(baseUrl + '/orders/place-order', params, config).then(response => {
+
+        let finalConfig = config;
+        if (token) {
+            finalConfig = {headers: {Authorization: 'Bearer ' + token, ...(config.headers)}};
+        }
+        return axios.post(baseUrl + '/orders/place-order', params, finalConfig).then(response => {
             return response.data;
         }).catch(err => console.log(err))
     },

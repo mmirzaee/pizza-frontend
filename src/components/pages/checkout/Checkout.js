@@ -23,6 +23,7 @@ function Alert(props) {
 
 const mapStateToProps = (state) => ({
     items: state.items,
+    token: state.token,
 });
 
 class Checkout extends Component {
@@ -58,19 +59,21 @@ class Checkout extends Component {
 
     submit = () => {
         const {fullName, mobile, address} = this.state;
+        const {token, items} = this.props;
 
         let postData = {
             full_name: fullName,
             mobile: mobile,
             address: address,
-            items: CartUtils.toJson(this.props.items)
+            items: CartUtils.toJson(items)
         };
         this.setState({isLoading: true})
-        Api.sendOrder(postData).then((res) => {
+        Api.sendOrder(postData, token).then((res) => {
             this.setState({isLoading: false, showSuccess: true}, () => {
                 setTimeout(() => {
                     this.props.dispatch(updateCartAction([]));
-                    this.props.history.push('/');
+
+                    this.props.history.push(token ? '/history' : '/');
                 }, 3000);
 
             });
