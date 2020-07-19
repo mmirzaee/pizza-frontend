@@ -1,42 +1,38 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import Menu from '../../general/Menu';
 import Grid from '@material-ui/core/Grid';
 import ItemCard from '../../general/ItemCard';
 import Api from "../../../api/Api";
 import Cart from "../../general/Cart";
 
-
-export default class Home extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {menuItems: null, showCart: false, exchangeRate: 0}
-    }
-
-    componentDidMount() {
-        Api.getMenu().then((res) => {
-            this.setState({menuItems: res})
-        })
-
-        Api.getExchangeRate().then((res) => {
-            this.setState({exchangeRate: res})
-        })
-    }
+    function Home(props) {
+        const [menuItems, setMenuItems] = React.useState(null);
+        const [showCart, setShowCart] = React.useState(false);
+        const [exchangeRate, setExchangeRate] = React.useState(0);
 
 
-    render() {
-        const {menuItems, showCart, exchangeRate} = this.state;
+        useEffect(() => {
+            Api.getMenu().then((res) => {
+                setMenuItems(res);
+            });
+
+            Api.getExchangeRate().then((res) => {
+                setExchangeRate(res);
+            });
+        }, []);
+
         const getCartClasses = () => {
             return "cart " + (showCart ? "cart-visible" : "");
-        }
+        };
 
         const openCart = () => {
-            this.setState({showCart: true});
-        }
+            setShowCart(true);
+        };
 
         const closeCart = () => {
-            this.setState({showCart: false});
-        }
+            setShowCart(false);
+        };
+
         return <>
             <Menu showCart={true} onClickCart={openCart}/>
             <Grid container>
@@ -60,7 +56,7 @@ export default class Home extends Component {
                     })}
                 </Grid>
                 <Grid
-                    container item xs={0} lg={3}
+                    container item xs={'auto'} lg={3}
                     direction="row"
                     className={getCartClasses()}
                 >
@@ -69,5 +65,4 @@ export default class Home extends Component {
             </Grid>
 
         </>
-    }
 }
