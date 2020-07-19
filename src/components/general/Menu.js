@@ -101,13 +101,13 @@ function Menu(props) {
     const [loginError, setLoginError] = React.useState(false);
 
     const login = () => {
-          setOpen(true);
+        setOpen(true);
     };
 
     const logout = () => {
-          props.dispatch(updateProfileAction({}));
-          props.dispatch(updateTokenAction(null));
-          snackbar.showMessage('Logged out')
+        props.dispatch(updateProfileAction({}));
+        props.dispatch(updateTokenAction(null));
+        snackbar.showMessage('Logged out')
     };
 
     const handleLoginDialogClose = () => {
@@ -187,7 +187,7 @@ function Menu(props) {
                             </IconButton>
                         </Link>
                         }
-                        {!token ?  <IconButton
+                        {!token ? <IconButton
                             color="inherit"
                             onClick={login}
                         >
@@ -198,7 +198,7 @@ function Menu(props) {
                         >
                             <ExitToAppIcon/>
                         </IconButton>
-                            }
+                        }
                         {props.showCart &&
                         <Hidden lgUp>
                             <IconButton

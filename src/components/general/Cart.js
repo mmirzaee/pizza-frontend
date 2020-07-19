@@ -68,7 +68,7 @@ function Cart(props) {
                 <h2 className="font-300">Your cart items:</h2>
             </Grid>
 
-            {props.items.length == 0 &&
+            {props.items.length === 0 &&
             <ListItem>No item is in your cart 🧐</ListItem>
             }
 

@@ -40,7 +40,7 @@ code {
     border-radius: 4px;
     box-shadow: 0 3px 7px 1px #bbbbbb50 !important;
     width: calc(24%);
-     position: fixed;
+    position: fixed;
     min-width: 345px;
     margin-top: 15px;
     padding-bottom: 20px;

@@ -21,7 +21,6 @@ const mapStateToProps = (state) => ({
 });
 
 
-
 function Checkout(props) {
     const [exchangeRate, setExchangeRate] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
@@ -110,7 +109,7 @@ function Checkout(props) {
                             label="Mobile Number"
                             variant="outlined"
                             fullWidth
-                            disabled={loading || props.items.length == 0}
+                            disabled={loading || props.items.length === 0}
                             onChange={handleChangeMobile}
                         />
                     </Grid>
@@ -124,7 +123,7 @@ function Checkout(props) {
                             multiline
                             fullWidth
                             rows={4}
-                            disabled={loading || props.items.length == 0}
+                            disabled={loading || props.items.length === 0}
                             onChange={handleChangeAddress}
                         />
                     </Grid>
@@ -134,7 +133,7 @@ function Checkout(props) {
                       justify="center" spacing={5}
                 >
                     <Button variant="outlined" color="secondary" onClick={submit}
-                            disabled={loading || props.items.length == 0}>
+                            disabled={loading || props.items.length === 0}>
                         {loading &&
                         <CircularProgress color="inherit"/>
                         }

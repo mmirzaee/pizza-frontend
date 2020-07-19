@@ -28,14 +28,14 @@ function App() {
     return (
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-                <SnackbarProvider SnackbarProps={{ autoHideDuration: 4000 }}>
-                <div className="root-container">
-                    <Router>
-                        <Route exact path="/" component={Home}/>
-                        <Route exact path="/checkout" component={Checkout}/>
-                        <Route exact path="/orders" component={OrderHistory}/>
-                    </Router>
-                </div>
+                <SnackbarProvider SnackbarProps={{autoHideDuration: 4000}}>
+                    <div className="root-container">
+                        <Router>
+                            <Route exact path="/" component={Home}/>
+                            <Route exact path="/checkout" component={Checkout}/>
+                            <Route exact path="/orders" component={OrderHistory}/>
+                        </Router>
+                    </div>
                 </SnackbarProvider>
             </PersistGate>
         </Provider>

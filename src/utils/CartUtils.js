@@ -3,7 +3,7 @@ const CartUtils = {
         let updated = false;
         let ret = items.map(
             i => {
-                if (i.id == item.id) {
+                if (i.id === item.id) {
                     i.quantity++;
                     updated = true;
                 }
@@ -24,7 +24,7 @@ const CartUtils = {
     },
 
     remove(item, items) {
-        let ret_items = items.reduce(
+        return items.reduce(
             (ret, i) => {
                 if (i.id === item.id) {
                     i.quantity--;
@@ -37,7 +37,6 @@ const CartUtils = {
                 return ret;
             }, []
         );
-        return ret_items;
     },
 
     toJson(items) {

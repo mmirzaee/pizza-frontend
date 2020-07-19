@@ -14,7 +14,7 @@ import CartUtils from '../../utils/CartUtils';
 import {useSnackbar} from 'material-ui-snackbar-provider'
 
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         width: '100%'
     },
@@ -44,7 +44,7 @@ function ItemCard(props) {
 
     const addToItems = () => {
         props.dispatch(updateCartAction(CartUtils.add(props.item, props.items)));
-        snackbar.showMessage(props.item.title+' added to cart')
+        snackbar.showMessage(props.item.title + ' added to cart')
     };
 
     return (
