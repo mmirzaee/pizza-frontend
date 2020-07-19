@@ -51,6 +51,12 @@ const Api = {
             return response.data;
         }).catch(err => console.log(err))
     },
+    getOrdersHistory(token) {
+        const configWithToken = {headers: {Authorization: 'Bearer ' + token, ...(config.headers)}};
+        return axios.get(baseUrl + '/orders/history', configWithToken).then(response => {
+            return response.data;
+        }).catch(err => console.log(err))
+    },
 };
 
 export default Api
