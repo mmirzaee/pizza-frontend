@@ -12,7 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {withRouter} from 'react-router-dom'
 import {updateCartAction} from "../../../actions/UpdateCartAction";
-import {useSnackbar} from 'material-ui-snackbar-provider'
+import {useSnackbar} from 'material-ui-snackbar-provider';
 
 
 const mapStateToProps = (state) => ({
@@ -58,7 +58,7 @@ function Checkout(props) {
         };
         Api.sendOrder(postData, token).then((res) => {
             setLoading(true);
-            snackbar.show('Order submitted successfully');
+            snackbar.showMessage('Order submitted successfully');
             props.dispatch(updateCartAction([]));
             props.history.push(token ? '/orders' : '/');
         })
