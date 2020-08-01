@@ -20,7 +20,7 @@ const Api = {
     },
     sendOrder(data, token) {
         const params = new URLSearchParams();
-        Object.keys(data).map(i => {
+        Object.keys(data).forEach(i => {
             params.append(i, data[i]);
         });
 
@@ -34,7 +34,7 @@ const Api = {
     },
     postLogin(data) {
         const params = new URLSearchParams();
-        Object.keys(data).map(i => {
+        Object.keys(data).forEach(i => {
             params.append(i, data[i]);
         });
         return axios.post(baseUrl + '/auth/login', params, config).then(response => {
@@ -43,7 +43,7 @@ const Api = {
     },
     postRegister(data) {
         const params = new URLSearchParams();
-        Object.keys(data).map(i => {
+        Object.keys(data).forEach(i => {
             params.append(i, data[i]);
         });
         return axios.post(baseUrl + '/auth/signup', params, config).then(response => {

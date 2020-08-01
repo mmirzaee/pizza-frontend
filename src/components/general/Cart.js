@@ -39,7 +39,7 @@ function Cart(props) {
 
     const getTotal = () => {
         let total = 0;
-        props.items.map((i) => {
+        props.items.forEach((i) => {
             total += i.price * i.quantity;
         });
 
@@ -69,7 +69,7 @@ function Cart(props) {
             </Grid>
 
             {props.items.length === 0 &&
-            <ListItem>No item is in your cart 🧐</ListItem>
+            <ListItem>No item is in your cart <span role="img" aria-label="mmm">🧐</span></ListItem>
             }
 
             {props.items.map((i) => <OrderItem key={i.id} data={i} add={add} remove={remove}

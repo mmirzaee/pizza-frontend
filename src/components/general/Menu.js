@@ -158,7 +158,7 @@ function Menu(props) {
 
     const getItemsCount = () => {
         let count = 0;
-        props.items.map(i => {
+        props.items.forEach(i => {
             count += i.quantity;
         });
         return count;
@@ -172,6 +172,7 @@ function Menu(props) {
                         <div>
                             <Link className="menu-link-style" to={'/'}>
                                 <img src="https://github.com/mmirzaee/pizza-backend/raw/master/pizza.png"
+                                     alt="logo"
                                      className={classes.logo}/>
                                 <h1 className={classes.siteName}>InnoPizza</h1>
                             </Link>

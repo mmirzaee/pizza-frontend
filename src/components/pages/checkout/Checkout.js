@@ -95,7 +95,7 @@ function Checkout(props) {
                             label="Full Name"
                             variant="outlined"
                             fullWidth
-                            disabled={loading || props.items.length == 0}
+                            disabled={loading || props.items.length === 0}
                             onChange={handleChangeFullName}
                         />
                     </Grid>

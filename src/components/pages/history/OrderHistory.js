@@ -1,4 +1,4 @@
-import React, {Component, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import Menu from "../../general/Menu";
 import {connect} from "react-redux";
 import Api from "../../../api/Api";
@@ -31,7 +31,7 @@ function OrderHistory(props) {
             setLoading(false);
             setOrderHistoryItems(res);
         })
-    }, []);
+    });
 
     const {token} = props;
     const statusEnum = {'1': 'Successfully Submitted', '2': 'In The Way', '3': 'Delivered', '0': 'Cancelled'};
